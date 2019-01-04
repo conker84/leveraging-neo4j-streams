@@ -1,0 +1,665 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n# (Neo4j)-[:LOVES]-\u003e(Kafka)\n\n\u003cdiv class\u003d\"img-responsive center-block\" style\u003d\"background-image: url(\u0027https://cdn-images-1.medium.com/max/2000/1*0k7QFFBl7YGD9haNYeLQpw.png\u0027); width: 1124px; height: 300px; background-position: center; background-size: cover;\"\u003e\u003c/div\u003e\n\n## Link\n\nhttps://neo4j-contrib.github.io/neo4j-streams/",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:55:42.512",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003e(Neo4j)-[:LOVES]-\u0026gt;(Kafka)\u003c/h1\u003e\n\u003cdiv class\u003d\"img-responsive center-block\" style\u003d\"background-image: url(\u0027https://cdn-images-1.medium.com/max/2000/1*0k7QFFBl7YGD9haNYeLQpw.png\u0027); width: 1124px; height: 300px; background-position: center; background-size: cover;\"\u003e\u003c/div\u003e\n\u003ch2\u003eLink\u003c/h2\u003e\n\u003cp\u003e\u003ca href\u003d\"https://neo4j-contrib.github.io/neo4j-streams/\"\u003ehttps://neo4j-contrib.github.io/neo4j-streams/\u003c/a\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546640004860_252392851",
+      "id": "20190104-221324_126128789",
+      "dateCreated": "2019-01-04 22:13:24.860",
+      "dateStarted": "2019-01-17 21:55:42.513",
+      "dateFinished": "2019-01-17 21:55:42.521",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Query the JIT-DWH",
+      "text": "val flattenedDF \u003d (spark.read.format(\"json\").load(\"/zeppelin/spark-warehouse/jit-dwh/**\")\n    .where(\"neo_id is not null\")\n    .groupBy(\"neo_id\", \"timestamp\", \"host\", \"labels\", \"operation\")\n    .pivot(\"key\")\n    .agg(first($\"value\")))\nz.show(flattenedDF)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:43.967",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {
+                    "columns": [
+                      {
+                        "name": "neo_id",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {
+                          "priority": 0.0,
+                          "direction": "asc"
+                        },
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "timestamp",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "host",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "labels",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "operation",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "age",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "foo",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "genere",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "id",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "index",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "name",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      }
+                    ],
+                    "scrollFocus": {},
+                    "selection": [],
+                    "grouping": {
+                      "grouping": [],
+                      "aggregations": [],
+                      "rowExpandedStates": {}
+                    },
+                    "treeView": {},
+                    "pagination": {
+                      "paginationCurrentPage": 1.0,
+                      "paginationPageSize": 250.0
+                    }
+                  },
+                  "tableColumnTypeState": {
+                    "names": {
+                      "neo_id": "string",
+                      "timestamp": "string",
+                      "host": "string",
+                      "labels": "string",
+                      "operation": "string",
+                      "age": "string",
+                      "foo": "string",
+                      "genere": "string",
+                      "id": "string",
+                      "index": "string",
+                      "name": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          },
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {
+                    "columns": [
+                      {
+                        "name": "neo_id",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "timestamp",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {
+                          "priority": 0.0,
+                          "direction": "desc"
+                        },
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "host",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "labels",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "operation",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "age",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "gender",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "id",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "index",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "name",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      }
+                    ],
+                    "scrollFocus": {},
+                    "selection": [],
+                    "grouping": {
+                      "grouping": [],
+                      "aggregations": [],
+                      "rowExpandedStates": {}
+                    },
+                    "treeView": {},
+                    "pagination": {
+                      "paginationCurrentPage": 1.0,
+                      "paginationPageSize": 250.0
+                    }
+                  },
+                  "tableColumnTypeState": {
+                    "names": {
+                      "neo_id": "string",
+                      "timestamp": "string",
+                      "host": "string",
+                      "labels": "string",
+                      "operation": "string",
+                      "age": "string",
+                      "gender": "string",
+                      "id": "string",
+                      "index": "string",
+                      "name": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {
+          "Filter by name (if empty will return the whole data):": "8f23a1e7-d9da-4614-a34e-497f622db31b",
+          "Filter by id (if empty will return the whole data):": ""
+        },
+        "forms": {}
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://zeppelin:4040/jobs/job?id\u003d3",
+            "http://zeppelin:4040/jobs/job?id\u003d4",
+            "http://zeppelin:4040/jobs/job?id\u003d5",
+            "http://zeppelin:4040/jobs/job?id\u003d6",
+            "http://zeppelin:4040/jobs/job?id\u003d7",
+            "http://zeppelin:4040/jobs/job?id\u003d8",
+            "http://zeppelin:4040/jobs/job?id\u003d9"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1544887386535_-991747571",
+      "id": "20181215-152306_1622979683",
+      "dateCreated": "2018-12-15 15:23:06.535",
+      "dateStarted": "2019-01-17 21:52:43.992",
+      "dateFinished": "2019-01-17 21:52:50.628",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s inspect the Structure of our data",
+      "text": "flattenedDF.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:53:04.541",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1545257412059_189713098",
+      "id": "20181219-221012_1949503923",
+      "dateCreated": "2018-12-19 22:10:12.059",
+      "dateStarted": "2019-01-17 21:53:04.561",
+      "dateFinished": "2019-01-17 21:53:04.955",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s go to add the field \"birth\" over a node",
+      "text": "%neo4j\nMATCH (p:Person{id: \u0027${Id}\u0027}) SET p.birth \u003d \u0027${birth}\u0027\nreturn p",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:55:28.721",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "label": "string",
+                      "gender": "string",
+                      "name": "string",
+                      "birth": "string",
+                      "index": "string",
+                      "age": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/undefined",
+        "editorHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {
+          "Id": "",
+          "birth": ""
+        },
+        "forms": {
+          "Id": {
+            "type": "TextBox",
+            "name": "Id",
+            "defaultValue": "",
+            "hidden": false
+          },
+          "birth": {
+            "type": "TextBox",
+            "name": "birth",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1544887394263_-1033244734",
+      "id": "20181215-152314_576310725",
+      "dateCreated": "2018-12-15 15:23:14.263",
+      "dateStarted": "2019-01-17 21:55:28.740",
+      "dateFinished": "2019-01-17 21:55:28.762",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Check how the new field is automatically added to our representation",
+      "text": "val flattenedDF \u003d (spark.read.format(\"json\").load(\"/zeppelin/spark-warehouse/jit-dwh/**\")\n    .where(\"neo_id is not null\")\n    .groupBy(\"neo_id\", \"timestamp\", \"host\", \"labels\", \"operation\")\n    .pivot(\"key\")\n    .agg(first($\"value\")))\nval id \u003d z.input(\"Id\")\nz.show(flattenedDF.where(s\"id \u003d \u0027${id}\u0027\").orderBy(desc(\"timestamp\")))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:55:32.299",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "neo_id": "string",
+                      "timestamp": "string",
+                      "host": "string",
+                      "labels": "string",
+                      "operation": "string",
+                      "age": "string",
+                      "birth": "string",
+                      "gender": "string",
+                      "id": "string",
+                      "index": "string",
+                      "name": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {
+          "Id": ""
+        },
+        "forms": {
+          "Id": {
+            "type": "TextBox",
+            "name": "Id",
+            "displayName": "Id",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://zeppelin:4040/jobs/job?id\u003d31",
+            "http://zeppelin:4040/jobs/job?id\u003d32",
+            "http://zeppelin:4040/jobs/job?id\u003d33",
+            "http://zeppelin:4040/jobs/job?id\u003d34"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1544887890431_-248154335",
+      "id": "20181215-153130_1110911769",
+      "dateCreated": "2018-12-15 15:31:30.431",
+      "dateStarted": "2019-01-17 21:55:32.320",
+      "dateFinished": "2019-01-17 21:55:35.971",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1545870763934_1355092656",
+      "id": "20181227-003243_1610514887",
+      "dateCreated": "2018-12-27 00:32:43.934",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Medium/Part 1/Query The JIT-DWH",
+  "id": "2DZ7DS1EZ",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "neo4j:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {}
+}

@@ -1,0 +1,1127 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n# (Neo4j)-[:LOVES]-\u003e(Kafka)\n\n\u003cdiv class\u003d\"img-responsive center-block\" style\u003d\"background-image: url(\u0027https://cdn-images-1.medium.com/max/2000/1*0k7QFFBl7YGD9haNYeLQpw.png\u0027); width: 1124px; height: 300px; background-position: center; background-size: cover;\"\u003e\u003c/div\u003e\n\n## Link\n\nhttps://neo4j-contrib.github.io/neo4j-streams/",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:10.931",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003e(Neo4j)-[:LOVES]-\u0026gt;(Kafka)\u003c/h1\u003e\n\u003cdiv class\u003d\"img-responsive center-block\" style\u003d\"background-image: url(\u0027https://cdn-images-1.medium.com/max/2000/1*0k7QFFBl7YGD9haNYeLQpw.png\u0027); width: 1124px; height: 300px; background-position: center; background-size: cover;\"\u003e\u003c/div\u003e\n\u003ch2\u003eLink\u003c/h2\u003e\n\u003cp\u003e\u003ca href\u003d\"https://neo4j-contrib.github.io/neo4j-streams/\"\u003ehttps://neo4j-contrib.github.io/neo4j-streams/\u003c/a\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546639944764_-1906403703",
+      "id": "20190104-221224_305673593",
+      "dateCreated": "2019-01-04 22:12:24.764",
+      "dateStarted": "2019-01-17 21:54:10.931",
+      "dateFinished": "2019-01-17 21:54:10.940",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Before start using this notebook you must load all required dependencies",
+      "text": "%spark.dep\nz.reset()\nz.load(\"org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.1\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:13.264",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1545257198077_-137928593",
+      "id": "20181219-220638_1033033539",
+      "dateCreated": "2018-12-19 22:06:38.077",
+      "dateStarted": "2019-01-17 21:54:13.323",
+      "dateFinished": "2019-01-17 21:54:13.332",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# Leveraging the Neo4j Streams module - Part 1 - Build a Just-In-Time Datawarehouse",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:31.415",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eLeveraging the Neo4j Streams module - Part 1 - Build a Just-In-Time Datawarehouse\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1545256808464_-912338087",
+      "id": "20181219-220008_870823315",
+      "dateCreated": "2018-12-19 22:00:08.464",
+      "dateStarted": "2019-01-17 21:54:31.415",
+      "dateFinished": "2019-01-17 21:54:31.434",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# A Legacy Structure\n\n## Enterprise Data Warehouses\nTraditional DWH requires data teams to constantly build multiple costly and time-consuming **E**xtract **T**ransform **L**oad (ETL) pipelines to ultimately derive business insights.\nOne of the biggest pain points is that, due to its **Rigid architecture that\u0027s difficult to chang*e*, Enterprise Data Warehouses are **inherently rigid**. That\u0027s because:\n\n* they are **based on** the **Schema-On-Write** architecture: first, you define your schema, then you write your data, then you read your data and it comes back in the schema you defined up-front;\n* they are **based on** (expensive) **batched/scheduled jobs**;\n\n**This results in having to build costly and time-consuming ETL pipeline** to access and manipulate the data. And as **new data types** and sources are introduced, the need to augment your ETL pipelines **exacerbates the problem**.\nThanks to the combination of the stream data processing with the Neo4j Streams CDC module and the Schema-On-Read approach provided by Apache Spark we can overcome this rigidity and build a new kind of (flexible) DWH.",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:32.767",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eA Legacy Structure\u003c/h1\u003e\n\u003ch2\u003eEnterprise Data Warehouses\u003c/h2\u003e\n\u003cp\u003eTraditional DWH requires data teams to constantly build multiple costly and time-consuming \u003cstrong\u003eE\u003c/strong\u003extract \u003cstrong\u003eT\u003c/strong\u003eransform \u003cstrong\u003eL\u003c/strong\u003eoad (ETL) pipelines to ultimately derive business insights.\u003cbr/\u003eOne of the biggest pain points is that, due to its **Rigid architecture that\u0026rsquo;s difficult to chang*e*, Enterprise Data Warehouses are \u003cstrong\u003einherently rigid\u003c/strong\u003e. That\u0026rsquo;s because:\u003c/p\u003e\n\u003cul\u003e\n  \u003cli\u003ethey are \u003cstrong\u003ebased on\u003c/strong\u003e the \u003cstrong\u003eSchema-On-Write\u003c/strong\u003e architecture: first, you define your schema, then you write your data, then you read your data and it comes back in the schema you defined up-front;\u003c/li\u003e\n  \u003cli\u003ethey are \u003cstrong\u003ebased on\u003c/strong\u003e (expensive) \u003cstrong\u003ebatched/scheduled jobs\u003c/strong\u003e;\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eThis results in having to build costly and time-consuming ETL pipeline\u003c/strong\u003e to access and manipulate the data. And as \u003cstrong\u003enew data types\u003c/strong\u003e and sources are introduced, the need to augment your ETL pipelines \u003cstrong\u003eexacerbates the problem\u003c/strong\u003e.\u003cbr/\u003eThanks to the combination of the stream data processing with the Neo4j Streams CDC module and the Schema-On-Read approach provided by Apache Spark we can overcome this rigidity and build a new kind of (flexible) DWH.\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547761323902_-328252943",
+      "id": "20190117-214203_1930190604",
+      "dateCreated": "2019-01-17 21:42:03.903",
+      "dateStarted": "2019-01-17 21:54:32.769",
+      "dateFinished": "2019-01-17 21:54:32.813",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# A paradigm shift: Just-In-Time Data Warehouse\n\nA JIT-DWH solution is designed to easily handle a wider variety of data from different sources an start from a different approach about how to deal and manage data: **Schema-On-Read**\n\n## Schema-On-Read\n\nSchema-On-Read follows a different sequence, it just loads the data as-is and applies your own lens to the data when you read it back out. With this kind of approach you can present data in a schema that is adapted best to the queries being issued. You\u0027re not stuck with a one-size-fits-all schema. With schema-on-read, you can present the data back in a schema that is most relevant to the task at hand.\n\n## How to?\n\nApply this kind of schema is pretty simple and leverage the **Neo4j Streams** module with **Apache Spark**\u0027s Structured Streaming Apis and **Apache Kafka**",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:35.310",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eA paradigm shift: Just-In-Time Data Warehouse\u003c/h1\u003e\n\u003cp\u003eA JIT-DWH solution is designed to easily handle a wider variety of data from different sources an start from a different approach about how to deal and manage data: \u003cstrong\u003eSchema-On-Read\u003c/strong\u003e\u003c/p\u003e\n\u003ch2\u003eSchema-On-Read\u003c/h2\u003e\n\u003cp\u003eSchema-On-Read follows a different sequence, it just loads the data as-is and applies your own lens to the data when you read it back out. With this kind of approach you can present data in a schema that is adapted best to the queries being issued. You\u0026rsquo;re not stuck with a one-size-fits-all schema. With schema-on-read, you can present the data back in a schema that is most relevant to the task at hand.\u003c/p\u003e\n\u003ch2\u003eHow to?\u003c/h2\u003e\n\u003cp\u003eApply this kind of schema is pretty simple and leverage the \u003cstrong\u003eNeo4j Streams\u003c/strong\u003e module with \u003cstrong\u003eApache Spark\u003c/strong\u003e\u0026rsquo;s Structured Streaming Apis and \u003cstrong\u003eApache Kafka\u003c/strong\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544639004283_-1018195783",
+      "id": "20181212-182324_330547645",
+      "dateCreated": "2018-12-12 18:23:24.283",
+      "dateStarted": "2019-01-17 21:54:35.311",
+      "dateFinished": "2019-01-17 21:54:35.337",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# Leveraging the Neo4j Streams Change Data Capture (CDC)\n\nThe Neo4j Streams project is composed of three main pillars:\n\n* The Change Data Capture that allows to stream database changes over Kafka topics\n* The Sink that allows consuming data streams from Kafka topic\n* A set of procedures that allows to Produce/Consume data to/from Kafka Topics\n\nThis notebook is focused on the Change Data Capture\n\n## What is a Change Data Capture?\n\nIt\u0027s a system that automatically captures changes from a source system (a Datatabase for instace) and automatically notifies these changes to a target system.\nCDC typically forms part of an ETL pipeline. This is an important component for ensuring Data Warehouses (DWH) are kept up to date with any record changes.\nAlso traditionally CDC applications worked off of transaction logs, thereby allowing to replicate databases without having a/much performance impact on its operation.",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:37.950",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eLeveraging the Neo4j Streams Change Data Capture (CDC)\u003c/h1\u003e\n\u003cp\u003eThe Neo4j Streams project is composed of three main pillars:\u003c/p\u003e\n\u003cul\u003e\n  \u003cli\u003eThe Change Data Capture that allows to stream database changes over Kafka topics\u003c/li\u003e\n  \u003cli\u003eThe Sink that allows consuming data streams from Kafka topic\u003c/li\u003e\n  \u003cli\u003eA set of procedures that allows to Produce/Consume data to/from Kafka Topics\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThis notebook is focused on the Change Data Capture\u003c/p\u003e\n\u003ch2\u003eWhat is a Change Data Capture?\u003c/h2\u003e\n\u003cp\u003eIt\u0026rsquo;s a system that automatically captures changes from a source system (a Datatabase for instace) and automatically notifies these changes to a target system.\u003cbr/\u003eCDC typically forms part of an ETL pipeline. This is an important component for ensuring Data Warehouses (DWH) are kept up to date with any record changes.\u003cbr/\u003eAlso traditionally CDC applications worked off of transaction logs, thereby allowing to replicate databases without having a/much performance impact on its operation.\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544873332043_1728466370",
+      "id": "20181215-112852_639966893",
+      "dateCreated": "2018-12-15 11:28:52.044",
+      "dateStarted": "2019-01-17 21:54:37.951",
+      "dateFinished": "2019-01-17 21:54:37.970",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## How the Neo4j Streams CDC module deal with database changes?\n\nEvery transaction inside Neo4j gets intercept and unpacked in order to stream an atomic element of the transaction.\nLet\u0027s suppose we have a simple creation of two nodes and one relationship between them:\n\n```\nCREATE (andrea:Person{name:\"Andrea\"})-[knows:KNOWS{since:2014}]-\u003e(michael:Person{name:\"Michael\"})\n```\n\nThe CDC module will unpack this transaction into 3 events (2 node creation, 1 relationship creation). And the data streamed from the CDC has the following structure:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:40.898",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eHow the Neo4j Streams CDC module deal with database changes?\u003c/h2\u003e\n\u003cp\u003eEvery transaction inside Neo4j gets intercept and unpacked in order to stream an atomic element of the transaction.\u003cbr/\u003eLet\u0026rsquo;s suppose we have a simple creation of two nodes and one relationship between them:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eCREATE (andrea:Person{name:\u0026quot;Andrea\u0026quot;})-[knows:KNOWS{since:2014}]-\u0026gt;(michael:Person{name:\u0026quot;Michael\u0026quot;})\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe CDC module will unpack this transaction into 3 events (2 node creation, 1 relationship creation). And the data streamed from the CDC has the following structure:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544873956154_-2140557392",
+      "id": "20181215-113916_562238724",
+      "dateCreated": "2018-12-15 11:39:16.155",
+      "dateStarted": "2019-01-17 21:54:40.898",
+      "dateFinished": "2019-01-17 21:54:40.909",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nThe Event structure was inspired by the [Debezium](https://debezium.io/) format and has the following general structure:\n\n```\n{\n  \"meta\": { /* transaction meta-data */ },\n  \"payload\": { /* the data related to the transaction */\n    \"before\": { /* the data before the transaction */},\n    \"after\": { /* the data after the transaction */}\n  }\n}\n```",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:42.848",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThe Event structure was inspired by the \u003ca href\u003d\"https://debezium.io/\"\u003eDebezium\u003c/a\u003e format and has the following general structure:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e{\n  \u0026quot;meta\u0026quot;: { /* transaction meta-data */ },\n  \u0026quot;payload\u0026quot;: { /* the data related to the transaction */\n    \u0026quot;before\u0026quot;: { /* the data before the transaction */},\n    \u0026quot;after\u0026quot;: { /* the data after the transaction */}\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547249165179_-758674009",
+      "id": "20190111-232605_812796367",
+      "dateCreated": "2019-01-11 23:26:05.179",
+      "dateStarted": "2019-01-17 21:54:42.848",
+      "dateFinished": "2019-01-17 21:54:42.860",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\nNode source `(andrea)`:\n```\n{\n  \"meta\": {\n    \"timestamp\": 1532597182604,\n    \"username\": \"neo4j\",\n    \"tx_id\": 1,\n    \"tx_event_id\": 0,\n    \"tx_events_count\": 3,\n    \"operation\": \"created\",\n    \"source\": {\n      \"hostname\": \"neo4j.mycompany.com\"\n    }\n  },\n  \"payload\": {\n    \"id\": \"1004\",\n    \"type\": \"node\",\n    \"after\": {\n      \"labels\": [\"Person\"],\n      \"properties\": {\n        \"name\": \"Andrea\"\n      }\n    }\n  }\n}\n```",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:44.400",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eNode source \u003ccode\u003e(andrea)\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e{\n  \u0026quot;meta\u0026quot;: {\n    \u0026quot;timestamp\u0026quot;: 1532597182604,\n    \u0026quot;username\u0026quot;: \u0026quot;neo4j\u0026quot;,\n    \u0026quot;tx_id\u0026quot;: 1,\n    \u0026quot;tx_event_id\u0026quot;: 0,\n    \u0026quot;tx_events_count\u0026quot;: 3,\n    \u0026quot;operation\u0026quot;: \u0026quot;created\u0026quot;,\n    \u0026quot;source\u0026quot;: {\n      \u0026quot;hostname\u0026quot;: \u0026quot;neo4j.mycompany.com\u0026quot;\n    }\n  },\n  \u0026quot;payload\u0026quot;: {\n    \u0026quot;id\u0026quot;: \u0026quot;1004\u0026quot;,\n    \u0026quot;type\u0026quot;: \u0026quot;node\u0026quot;,\n    \u0026quot;after\u0026quot;: {\n      \u0026quot;labels\u0026quot;: [\u0026quot;Person\u0026quot;],\n      \u0026quot;properties\u0026quot;: {\n        \u0026quot;name\u0026quot;: \u0026quot;Andrea\u0026quot;\n      }\n    }\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544874651116_315267579",
+      "id": "20181215-115051_21333802",
+      "dateCreated": "2018-12-15 11:50:51.116",
+      "dateStarted": "2019-01-17 21:54:44.400",
+      "dateFinished": "2019-01-17 21:54:44.410",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\nNode target `(michael)`:\n```\n{\n  \"meta\": {\n    \"timestamp\": 1532597182604,\n    \"username\": \"neo4j\",\n    \"tx_id\": 1,\n    \"tx_event_id\": 1,\n    \"tx_events_count\": 3,\n    \"operation\": \"created\",\n    \"source\": {\n      \"hostname\": \"neo4j.mycompany.com\"\n    }\n  },\n  \"payload\": {\n    \"id\": \"1006\",\n    \"type\": \"node\",\n    \"after\": {\n      \"labels\": [\"Person\"],\n      \"properties\": {\n        \"name\": \"Michael\"\n      }\n    }\n  }\n}\n```",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:46.180",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eNode target \u003ccode\u003e(michael)\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e{\n  \u0026quot;meta\u0026quot;: {\n    \u0026quot;timestamp\u0026quot;: 1532597182604,\n    \u0026quot;username\u0026quot;: \u0026quot;neo4j\u0026quot;,\n    \u0026quot;tx_id\u0026quot;: 1,\n    \u0026quot;tx_event_id\u0026quot;: 1,\n    \u0026quot;tx_events_count\u0026quot;: 3,\n    \u0026quot;operation\u0026quot;: \u0026quot;created\u0026quot;,\n    \u0026quot;source\u0026quot;: {\n      \u0026quot;hostname\u0026quot;: \u0026quot;neo4j.mycompany.com\u0026quot;\n    }\n  },\n  \u0026quot;payload\u0026quot;: {\n    \u0026quot;id\u0026quot;: \u0026quot;1006\u0026quot;,\n    \u0026quot;type\u0026quot;: \u0026quot;node\u0026quot;,\n    \u0026quot;after\u0026quot;: {\n      \u0026quot;labels\u0026quot;: [\u0026quot;Person\u0026quot;],\n      \u0026quot;properties\u0026quot;: {\n        \u0026quot;name\u0026quot;: \u0026quot;Michael\u0026quot;\n      }\n    }\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544874673405_-1428473544",
+      "id": "20181215-115113_2129040817",
+      "dateCreated": "2018-12-15 11:51:13.405",
+      "dateStarted": "2019-01-17 21:54:46.180",
+      "dateFinished": "2019-01-17 21:54:46.191",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\nRelationship `knows`:\n```\n{\n  \"meta\": {\n    \"timestamp\": 1532597182604,\n    \"username\": \"neo4j\",\n    \"tx_id\": 1,\n    \"tx_event_id\": 2,\n    \"tx_events_count\": 3,\n    \"operation\": \"created\",\n    \"source\": {\n      \"hostname\": \"neo4j.mycompany.com\"\n    }\n  },\n  \"payload\": {\n    \"id\": \"1007\",\n    \"type\": \"relationship\",\n    \"label\": \"KNOWS\",\n    \"start\": {\n      \"labels\": [\"Person\"],\n      \"id\": \"1005\"\n    },\n    \"end\": {\n      \"labels\": [\"Person\"],\n      \"id\": \"106\"\n    },\n    \"after\": {\n      \"properties\": {\n        \"since\": 2014\n      }\n    }\n  }\n}\n```",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:48.003",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eRelationship \u003ccode\u003eknows\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e{\n  \u0026quot;meta\u0026quot;: {\n    \u0026quot;timestamp\u0026quot;: 1532597182604,\n    \u0026quot;username\u0026quot;: \u0026quot;neo4j\u0026quot;,\n    \u0026quot;tx_id\u0026quot;: 1,\n    \u0026quot;tx_event_id\u0026quot;: 2,\n    \u0026quot;tx_events_count\u0026quot;: 3,\n    \u0026quot;operation\u0026quot;: \u0026quot;created\u0026quot;,\n    \u0026quot;source\u0026quot;: {\n      \u0026quot;hostname\u0026quot;: \u0026quot;neo4j.mycompany.com\u0026quot;\n    }\n  },\n  \u0026quot;payload\u0026quot;: {\n    \u0026quot;id\u0026quot;: \u0026quot;1007\u0026quot;,\n    \u0026quot;type\u0026quot;: \u0026quot;relationship\u0026quot;,\n    \u0026quot;label\u0026quot;: \u0026quot;KNOWS\u0026quot;,\n    \u0026quot;start\u0026quot;: {\n      \u0026quot;labels\u0026quot;: [\u0026quot;Person\u0026quot;],\n      \u0026quot;id\u0026quot;: \u0026quot;1005\u0026quot;\n    },\n    \u0026quot;end\u0026quot;: {\n      \u0026quot;labels\u0026quot;: [\u0026quot;Person\u0026quot;],\n      \u0026quot;id\u0026quot;: \u0026quot;106\u0026quot;\n    },\n    \u0026quot;after\u0026quot;: {\n      \u0026quot;properties\u0026quot;: {\n        \u0026quot;since\u0026quot;: 2014\n      }\n    }\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544874683869_-297061879",
+      "id": "20181215-115123_1545487101",
+      "dateCreated": "2018-12-15 11:51:23.869",
+      "dateStarted": "2019-01-17 21:54:48.004",
+      "dateFinished": "2019-01-17 21:54:48.020",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nTo a more in-depth description of the Neo4j Streams project and how/why we at [LARUS](http://www.larus-ba.it/) and [Neo4j](https://neo4j.com/) built it, check out [this article]((https://medium.com/neo4j/a-new-neo4j-integration-with-apache-kafka-6099c14851d2)) that provides an in-depth description.",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:50.135",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eTo a more in-depth description of the Neo4j Streams project and how/why we at \u003ca href\u003d\"http://www.larus-ba.it/\"\u003eLARUS\u003c/a\u003e and \u003ca href\u003d\"https://neo4j.com/\"\u003eNeo4j\u003c/a\u003e built it, check out \u003ca href\u003d\"https://medium.com/neo4j/a-new-neo4j-integration-with-apache-kafka-6099c14851d2\"\u003ethis article\u003c/a\u003e that provides an in-depth description.\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544874705031_-1964927112",
+      "id": "20181215-115145_1797779162",
+      "dateCreated": "2018-12-15 11:51:45.032",
+      "dateStarted": "2019-01-17 21:54:50.136",
+      "dateFinished": "2019-01-17 21:54:50.144",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\n# Create random Social Network Data\n\nWe\u0027ll create a fake social network by using the APOC apoc.periodic.repeat procedure that executes every 15 seconds this query:\n\n```\nWITH [\"M\", \"F\", \"\"] AS gender\nUNWIND range(1, 10) AS id\nCREATE (p:Person {id: apoc.create.uuid(), name: \"Name-\" +  apoc.text.random(10), age: round(rand() * 100), index: id, gender: gender[toInteger(size(gender) * rand())]})\nWITH collect(p) AS people\nUNWIND people AS p1\nUNWIND range(1, 3) AS friend\nWITH p1, people[(p1.index + friend) % size(people)] AS p2\nCREATE (p1)-[:KNOWS{years: round(rand() * 10), engaged: (rand() \u003e 0.5)}]-\u003e(p2)\n```\n\nIf you need more details about how the APOC project please follow this [link](https://neo4j-contrib.github.io/neo4j-apoc-procedures/)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:52.156",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eCreate random Social Network Data\u003c/h1\u003e\n\u003cp\u003eWe\u0026rsquo;ll create a fake social network by using the APOC apoc.periodic.repeat procedure that executes every 15 seconds this query:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eWITH [\u0026quot;M\u0026quot;, \u0026quot;F\u0026quot;, \u0026quot;\u0026quot;] AS gender\nUNWIND range(1, 10) AS id\nCREATE (p:Person {id: apoc.create.uuid(), name: \u0026quot;Name-\u0026quot; +  apoc.text.random(10), age: round(rand() * 100), index: id, gender: gender[toInteger(size(gender) * rand())]})\nWITH collect(p) AS people\nUNWIND people AS p1\nUNWIND range(1, 3) AS friend\nWITH p1, people[(p1.index + friend) % size(people)] AS p2\nCREATE (p1)-[:KNOWS{years: round(rand() * 10), engaged: (rand() \u0026gt; 0.5)}]-\u0026gt;(p2)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIf you need more details about how the APOC project please follow this \u003ca href\u003d\"https://neo4j-contrib.github.io/neo4j-apoc-procedures/\"\u003elink\u003c/a\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1544723320875_260371225",
+      "id": "20181213-174840_2104223392",
+      "dateCreated": "2018-12-13 17:48:40.875",
+      "dateStarted": "2019-01-17 21:54:52.156",
+      "dateFinished": "2019-01-17 21:54:52.173",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Execute this query if you want clean-up the DB",
+      "text": "%neo4j\nMATCH (n) detach delete n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:54:54.226",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/undefined",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1544875820365_-1399095546",
+      "id": "20181215-121020_2036794274",
+      "dateCreated": "2018-12-15 12:10:20.365",
+      "dateStarted": "2019-01-17 21:54:54.270",
+      "dateFinished": "2019-01-17 21:54:54.637",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create an Index on Person label",
+      "text": "%neo4j\nCREATE INDEX ON :Person(id)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-04 14:02:28.714",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/undefined",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1545256856989_-1814949593",
+      "id": "20181219-220056_2052771444",
+      "dateCreated": "2018-12-19 22:00:56.989",
+      "dateStarted": "2019-01-04 14:02:28.804",
+      "dateFinished": "2019-01-04 14:02:29.217",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Set the Background Job into Neo4j",
+      "text": "%neo4j\nCALL apoc.periodic.repeat(\u0027create-fake-social-data\u0027, \u0027WITH [\"M\", \"F\", \"X\"] AS gender UNWIND range(1, 10) AS id CREATE (p:Person {id: apoc.create.uuid(), name: \"Name-\" +  apoc.text.random(10), age: round(rand() * 100), index: id, gender: gender[toInteger(size(gender) * rand())]}) WITH collect(p) AS people UNWIND people AS p1 UNWIND range(1, 3) AS friend WITH p1, people[(p1.index + friend) % size(people)] AS p2 CREATE (p1)-[:KNOWS{years: round(rand() * 10), engaged: (rand() \u003e 0.5)}]-\u003e(p2)\u0027, 15) YIELD name\nRETURN name AS created",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:51:24.638",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "created": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/undefined",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1544315005272_-1215018482",
+      "id": "20181209-002325_644010003",
+      "dateCreated": "2018-12-09 00:23:25.272",
+      "dateStarted": "2019-01-17 21:51:24.686",
+      "dateFinished": "2019-01-17 21:51:24.712",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Run this query when you want stop the background job",
+      "text": "%neo4j\nCALL apoc.periodic.cancel(\u0027create-fake-social-data\u0027) YIELD name\nRETURN name AS cancelled",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:51:15.224",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "cancelled": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/undefined",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1544315927589_-1727327963",
+      "id": "20181209-003847_433243552",
+      "dateCreated": "2018-12-09 00:38:47.589",
+      "dateStarted": "2019-01-17 21:51:15.272",
+      "dateFinished": "2019-01-17 21:51:15.327",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s see how our data grow up",
+      "text": "%neo4j\nMATCH p \u003d (p1:Person)-[k:KNOWS]-\u003e(p2:Person)\nRETURN count(p)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:51:28.406",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "count(p)": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/undefined",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1544724812693_358713402",
+      "id": "20181213-181332_2045375519",
+      "dateCreated": "2018-12-13 18:13:32.693",
+      "dateStarted": "2019-01-17 21:51:28.445",
+      "dateFinished": "2019-01-17 21:51:28.465",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create a Structured Streaming Dataset that consumes the data from a \"neo4j\" topic (the default topic of the CDC)",
+      "text": "val kafkaStreamingDF \u003d (spark\n    .readStream\n    .format(\"kafka\")\n    .option(\"kafka.bootstrap.servers\", \"broker:9093\")\n    .option(\"startingoffsets\", \"earliest\")\n    .option(\"subscribe\", \"neo4j\")\n    .load())",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:51:31.571",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543857256009_-1749412095",
+      "id": "20181203-171416_2095332168",
+      "dateCreated": "2018-12-03 17:14:16.009",
+      "dateStarted": "2019-01-17 21:51:31.616",
+      "dateFinished": "2019-01-17 21:51:43.275",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "The structure of the data, as you can see is basically a Kafka ProducerRecord representation",
+      "text": "kafkaStreamingDF.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:04.538",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543875842999_1450926243",
+      "id": "20181203-222402_2131396521",
+      "dateCreated": "2018-12-03 22:24:02.999",
+      "dateStarted": "2019-01-17 21:52:04.585",
+      "dateFinished": "2019-01-17 21:52:04.926",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s create the Structure of the data streamed by the CDC",
+      "text": "import org.apache.spark.sql.types._\n\nval cdcMetaSchema \u003d (new StructType()\n    .add(\"timestamp\", LongType)\n    .add(\"username\", StringType)\n    .add(\"operation\", StringType)\n    .add(\"source\", MapType(StringType, StringType, true)))\n    \nval cdcPayloadSchemaBeforeAfter \u003d (new StructType()\n    .add(\"labels\", ArrayType(StringType, false))\n    .add(\"properties\",  MapType(StringType, StringType, true)))\n    \nval cdcPayloadSchema \u003d (new StructType()\n    .add(\"id\", StringType)\n    .add(\"type\", StringType)\n    .add(\"label\", StringType)\n    .add(\"start\", MapType(StringType, StringType, true))\n    .add(\"end\", MapType(StringType, StringType, true))\n    .add(\"before\", cdcPayloadSchemaBeforeAfter)\n    .add(\"after\", cdcPayloadSchemaBeforeAfter))\n    \nval cdcSchema \u003d (new StructType()\n    .add(\"meta\", cdcMetaSchema)\n    .add(\"payload\", cdcPayloadSchema))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:07.231",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543876714269_1198133785",
+      "id": "20181203-223834_1064272161",
+      "dateCreated": "2018-12-03 22:38:34.269",
+      "dateStarted": "2019-01-17 21:52:07.271",
+      "dateFinished": "2019-01-17 21:52:08.983",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s extract only the CDC Dataframe",
+      "text": "import org.apache.spark.sql.functions._\nval cdcDataFrame \u003d (kafkaStreamingDF\n    .selectExpr(\"CAST(value AS STRING) AS VALUE\")\n    .select(from_json(\u0027VALUE, cdcSchema) as \u0027JSON))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:11.020",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543876663606_-1727133849",
+      "id": "20181203-223743_2113201414",
+      "dateCreated": "2018-12-03 22:37:43.606",
+      "dateStarted": "2019-01-17 21:52:11.056",
+      "dateFinished": "2019-01-17 21:52:12.743",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "The cdcDataFrame schema",
+      "text": "cdcDataFrame.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:15.224",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543879759066_1634403562",
+      "id": "20181203-232919_1118633785",
+      "dateCreated": "2018-12-03 23:29:19.066",
+      "dateStarted": "2019-01-17 21:52:15.262",
+      "dateFinished": "2019-01-17 21:52:15.630",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Let\u0027s perform a simple ETL query in order to extract fields of interest",
+      "text": "val dataWarehouseDataFrame \u003d (cdcDataFrame\n    .where(\"json.payload.type \u003d \u0027node\u0027 and (array_contains(nvl(json.payload.after.labels, json.payload.before.labels), \u0027Person\u0027))\")\n    .selectExpr(\"json.payload.id AS neo_id\", \"CAST(json.meta.timestamp / 1000 AS Timestamp) AS timestamp\",\n        \"json.meta.source.hostname AS host\",\n        \"json.meta.operation AS operation\",\n        \"nvl(json.payload.after.labels, json.payload.before.labels) AS labels\",\n        \"explode(json.payload.after.properties)\"))\ndataWarehouseDataFrame.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:17.269",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": false,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1544316700884_-1906866864",
+      "id": "20181209-005140_1170394865",
+      "dateCreated": "2018-12-09 00:51:40.884",
+      "dateStarted": "2019-01-17 21:52:17.308",
+      "dateFinished": "2019-01-17 21:52:18.285",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "If you want debug your streaming query please execute this",
+      "text": "val query \u003d (dataWarehouseDataFrame\n    .writeStream\n    .outputMode(\"append\")\n    .format(\"console\")\n    .start())\nquery.awaitTermination(10000)\nquery.stop",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-11 23:22:30.293",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1543879772828_91147175",
+      "id": "20181203-232932_1554731041",
+      "dateCreated": "2018-12-03 23:29:32.828",
+      "dateStarted": "2019-01-11 23:22:30.339",
+      "dateFinished": "2019-01-11 23:22:41.742",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Save the data streamed from the Neo4j CDC over the Filesystem as JSON",
+      "text": "val writeOnDisk \u003d (dataWarehouseDataFrame\n    .writeStream\n    .format(\"json\")\n    .option(\"checkpointLocation\", \"/zeppelin/spark-warehouse/jit-dwh/checkpoint\")\n    .option(\"path\", \"/zeppelin/spark-warehouse/jit-dwh\")\n    .queryName(\"nodes\")\n    .start())",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:52:29.538",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1544822419860_1997633872",
+      "id": "20181214-212019_1790824348",
+      "dateCreated": "2018-12-14 21:20:19.860",
+      "dateStarted": "2019-01-17 21:52:29.591",
+      "dateFinished": "2019-01-17 21:52:30.599",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Launch this paragraph if you want stop the streaming JOB",
+      "text": "spark.streams.active.foreach { _.stop }",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-17 21:55:09.291",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1545871106531_-767112389",
+      "id": "20181227-003826_1846066318",
+      "dateCreated": "2018-12-27 00:38:26.531",
+      "dateStarted": "2019-01-17 21:55:09.346",
+      "dateFinished": "2019-01-17 21:55:09.973",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1547251750111_1788325601",
+      "id": "20190112-000910_510342874",
+      "dateCreated": "2019-01-12 00:09:10.111",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Medium/Part 1/Create a Just-In-Time Data Warehouse",
+  "id": "2DXCPAMJW",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "neo4j:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
