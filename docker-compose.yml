@@ -17,6 +17,18 @@ services:
       NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
       NEO4J_kafka_zookeeper_connect: zookeeper:2181
       NEO4J_kafka_bootstrap_servers: broker:9093
+      NEO4J_streams_sink_topic_cypher_pharma: "
+          MERGE (p:Pharmacy{fiscalId: event.FISCAL_ID}) ON CREATE SET p.name = event.NAME
+          MERGE (t:PharmacyType{type: event.TYPE_NAME})
+          MERGE (a:Address{name: event.ADDRESS + ', ' + event.CITY})
+            ON CREATE SET a.latitude = event.LATITUDE,
+                          a.longitude = event.LONGITUDE,
+                          a.code = event.POSTAL_CODE,
+                          a.point = event.POINT
+          MERGE (c:City{name: event.CITY})
+          MERGE (p)-[:IS_TYPE]-(t)
+          MERGE (p)-[:HAS_ADDRESS]-(a)
+          MERGE (a)-[:IS_LOCATED_IN]->(c)"
       # NEO4J_dbms_logs_debug_level: DEBUG
     volumes:
       - ./neo4j/plugins:/plugins
