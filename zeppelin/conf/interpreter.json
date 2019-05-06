@@ -163,6 +163,26 @@
       "name": "sap",
       "group": "sap",
       "properties": {
+        "universe.queryTimeout": {
+          "name": "universe.queryTimeout",
+          "value": "7200000",
+          "type": "number"
+        },
+        "universe.concurrent.use": {
+          "name": "universe.concurrent.use",
+          "value": true,
+          "type": "checkbox"
+        },
+        "universe.password": {
+          "name": "universe.password",
+          "value": "",
+          "type": "password"
+        },
+        "universe.interpolation": {
+          "name": "universe.interpolation",
+          "value": false,
+          "type": "checkbox"
+        },
         "universe.api.url": {
           "name": "universe.api.url",
           "value": "http://localhost:6405/biprws",
@@ -173,15 +193,15 @@
           "value": "secEnterprise",
           "type": "string"
         },
+        "universe.concurrent.maxConnection": {
+          "name": "universe.concurrent.maxConnection",
+          "value": "10",
+          "type": "number"
+        },
         "universe.user": {
           "name": "universe.user",
           "value": "",
           "type": "string"
-        },
-        "universe.password": {
-          "name": "universe.password",
-          "value": "",
-          "type": "password"
         }
       },
       "status": "READY",
@@ -193,7 +213,7 @@
           "editor": {
             "editOnDblClick": false,
             "completionKey": "TAB",
-            "completionSupport": true
+            "completionSupport": false
           }
         }
       ],
@@ -291,6 +311,16 @@
           "name": "zeppelin.jdbc.interpolation",
           "value": false,
           "type": "checkbox"
+        },
+        "zeppelin.jdbc.maxConnLifetime": {
+          "name": "zeppelin.jdbc.maxConnLifetime",
+          "value": "-1",
+          "type": "number"
+        },
+        "zeppelin.jdbc.maxRows": {
+          "name": "zeppelin.jdbc.maxRows",
+          "value": "1000",
+          "type": "number"
         }
       },
       "status": "READY",
@@ -1235,6 +1265,11 @@
           "name": "zeppelin.spark.maxResult",
           "value": "1000",
           "type": "number"
+        },
+        "zeppelin.spark.ui.hidden": {
+          "name": "zeppelin.spark.ui.hidden",
+          "value": false,
+          "type": "checkbox"
         },
         "master": {
           "name": "master",

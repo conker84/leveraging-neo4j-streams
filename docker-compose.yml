@@ -37,9 +37,7 @@ services:
   zeppelin:
     hostname: zeppelin
     container_name: zeppelin
-    build:
-      context: .
-    image: santand84/zeppelin:0.8.0
+    image: apache/zeppelin:0.8.1
     ports:
       - 8080:8080
     volumes:
